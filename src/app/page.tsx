@@ -1197,8 +1197,8 @@ export default function BrickBreakerGame() {
               </div>
             </div>
 
-            {/* 캔버스 게임 화면 (모바일에서도 스크롤 없이 한 화면에 전체가 꽉 차도록 비율 및 뷰포트 높이 최적화) */}
-            <div className={`relative w-full max-w-[840px] aspect-[840/560] max-h-[62vh] sm:max-h-none rounded-2xl overflow-hidden border-2 sm:border-4 shadow-2xl transition-all ${
+            {/* 캔버스 게임 화면: PC와 모바일 모두에서 비율에 맞게 캔버스 크기를 넉넉하게 유지 */}
+            <div className={`relative w-full max-w-[840px] aspect-[840/560] rounded-2xl overflow-hidden border-2 sm:border-4 shadow-2xl transition-all ${
               theme === "dark" ? "border-slate-800 bg-black" : "border-slate-300 bg-slate-100"
             }`}>
               <canvas
@@ -1206,7 +1206,7 @@ export default function BrickBreakerGame() {
                 width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
                 onTouchMove={handleTouchMove}
-                className="w-full h-full block touch-none cursor-crosshair object-contain"
+                className="w-full h-full block touch-none cursor-crosshair"
               />
 
               {/* 연한 빨강 블록 제거 시 따봉 1초 띄우기 (요구사항: 연한 빨강 블록 하나 깰 때마다 따봉 아이콘 1초간 띄우기) */}
@@ -1264,39 +1264,39 @@ export default function BrickBreakerGame() {
 
               {/* 게임 성공(미션 완료) 오버레이 */}
               {gameStatus === "cleared" && (
-                <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-2 sm:p-5 text-center animate-in fade-in zoom-in-95 duration-300 z-40">
-                  <div className="w-8 h-8 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center mb-1 sm:mb-2 shadow-lg shadow-amber-500/40 shrink-0">
-                    <Trophy className="w-4 h-4 sm:w-7 sm:h-7 text-slate-950" />
+                <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 text-center animate-in fade-in zoom-in-95 duration-300 z-40">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center mb-1 sm:mb-2 shadow-lg shadow-amber-500/40 shrink-0">
+                    <Trophy className="w-5 h-5 sm:w-8 sm:h-8 text-slate-950" />
                   </div>
-                  <h2 className="text-sm sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-white mb-0.5 leading-tight">
+                  <h2 className="text-base sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-white mb-0.5 leading-tight">
                     🎉 게임 미션 완료!
                   </h2>
-                  <p className="text-slate-300 text-[10px] sm:text-xs max-w-[260px] sm:max-w-xs mb-1 sm:mb-2 leading-tight">
+                  <p className="text-slate-300 text-xs sm:text-sm max-w-sm mb-2 leading-tight">
                     {userName} 님 대단합니다!<br />
                     목표인 <strong className="text-rose-400">연한 빨강 블록 3개</strong>를 모두 파괴했습니다!
                   </p>
 
-                  <div className="bg-slate-900/95 border border-slate-700/80 rounded-xl p-1.5 sm:p-3 mb-1.5 sm:mb-3 w-full max-w-[240px] sm:max-w-xs space-y-1 text-xs shadow-inner">
-                    <div className="flex justify-between items-center border-b border-slate-800 pb-1">
-                      <span className="text-slate-400 text-[10px] sm:text-xs">내 클리어 시간</span>
-                      <span className="font-bold text-cyan-300 font-mono text-xs sm:text-base">{finalClearedTime || formatTime(elapsedTime)}</span>
+                  <div className="bg-slate-900/95 border border-slate-700/80 rounded-xl p-2.5 sm:p-4 mb-2.5 sm:mb-4 w-full max-w-[280px] sm:max-w-sm space-y-1.5 sm:space-y-2 text-xs sm:text-sm shadow-inner">
+                    <div className="flex justify-between items-center border-b border-slate-800 pb-1 sm:pb-1.5">
+                      <span className="text-slate-400 text-xs sm:text-sm">내 클리어 시간</span>
+                      <span className="font-bold text-cyan-300 font-mono text-sm sm:text-base">{finalClearedTime || formatTime(elapsedTime)}</span>
                     </div>
 
                     {/* TOP 3 명예의 전당 순위 출력 영역 */}
-                    <div className="space-y-0.5 sm:space-y-1 pt-0.5 text-left">
-                      <p className="text-[10px] sm:text-xs font-bold text-amber-400 flex items-center gap-1">
-                        <Trophy className="w-3 h-3 text-amber-400" />
+                    <div className="space-y-1 pt-0.5 text-left">
+                      <p className="text-xs sm:text-sm font-bold text-amber-400 flex items-center gap-1.5">
+                        <Trophy className="w-3.5 h-3.5 text-amber-400" />
                         실시간 TOP 3 랭킹
                       </p>
 
                       {isLoadingRankings ? (
-                        <p className="text-[9px] sm:text-[10px] text-slate-400 animate-pulse py-0.5">구글 시트에서 랭킹 불러오는 중...</p>
+                        <p className="text-xs text-slate-400 animate-pulse py-0.5">구글 시트에서 랭킹 불러오는 중...</p>
                       ) : topRankings.length > 0 ? (
-                        <div className="space-y-0.5 sm:space-y-1">
+                        <div className="space-y-1">
                           {topRankings.map((r, i) => (
                             <div
                               key={i}
-                              className={`flex justify-between items-center px-1.5 py-0.5 rounded text-[9px] sm:text-xs ${
+                              className={`flex justify-between items-center px-2 py-1 rounded text-xs sm:text-sm ${
                                 i === 0
                                   ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-bold"
                                   : i === 1
@@ -1304,45 +1304,45 @@ export default function BrickBreakerGame() {
                                   : "bg-slate-800/40 text-slate-300"
                               }`}
                             >
-                              <span className="flex items-center gap-1 truncate mr-1">
-                                <span className={`w-3 h-3 rounded-full flex items-center justify-center text-[8px] font-black shrink-0 ${
+                              <span className="flex items-center gap-1.5 truncate mr-2">
+                                <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
                                   i === 0 ? "bg-amber-400 text-slate-950" : i === 1 ? "bg-slate-300 text-slate-950" : "bg-amber-700 text-white"
                                 }`}>
                                   {i + 1}
                                 </span>
-                                <span className="truncate max-w-[80px] sm:max-w-[120px]">{r.name}</span>
+                                <span className="truncate max-w-[110px] sm:max-w-[150px]">{r.name}</span>
                               </span>
-                              <span className="font-mono font-bold text-cyan-300 shrink-0 text-[9px] sm:text-xs">{r.finishtime}</span>
+                              <span className="font-mono font-bold text-cyan-300 shrink-0">{r.finishtime}</span>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <p className="text-[9px] sm:text-[10px] text-slate-500 py-0.5">저장된 랭킹 기록을 확인하는 중입니다...</p>
+                        <p className="text-xs text-slate-500 py-0.5">저장된 랭킹 기록을 확인하는 중입니다...</p>
                       )}
                     </div>
 
                     {isSavingToSheet && (
-                      <p className="text-[9px] sm:text-[10px] text-blue-300 animate-pulse pt-0.5">구글 시트에 기록 저장 중...</p>
+                      <p className="text-xs text-blue-300 animate-pulse pt-0.5">구글 시트에 기록 저장 중...</p>
                     )}
                     {saveSheetSuccess === true && (
-                      <p className="text-[9px] sm:text-[10px] text-emerald-400 pt-0.5">✓ 구글 시트에 성공 기록이 저장되었습니다</p>
+                      <p className="text-xs text-emerald-400 pt-0.5">✓ 구글 시트에 성공 기록이 저장되었습니다</p>
                     )}
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2.5">
                     <Button
                       size="sm"
                       onClick={handleRetryCurrentGame}
-                      className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] sm:text-xs h-6 sm:h-8 px-2 sm:px-3 cursor-pointer shadow-md"
+                      className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 cursor-pointer shadow-md"
                     >
-                      <RotateCcw className="w-3 h-3 mr-1" />
+                      <RotateCcw className="w-3.5 h-3.5 mr-1" />
                       다시하기
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={handleRestartToLobby}
-                      className="border-slate-600 text-slate-300 hover:bg-slate-800 text-[11px] sm:text-xs h-6 sm:h-8 px-2 sm:px-3 cursor-pointer"
+                      className="border-slate-600 text-slate-300 hover:bg-slate-800 text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 cursor-pointer"
                     >
                       이름 변경(메인)
                     </Button>
