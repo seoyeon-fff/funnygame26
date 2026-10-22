@@ -991,7 +991,7 @@ export default function BrickBreakerGame() {
       </header>
 
       {/* 2. 메인 컨텐츠 영역 */}
-      <main className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 w-full max-w-6xl mx-auto">
+      <main className="flex-1 flex flex-col items-center justify-start sm:justify-center p-2 sm:p-6 w-full max-w-6xl mx-auto">
         {screen === "lobby" ? (
           /* =================== 로비 화면 (이름 입력 & 횃불이) =================== */
           <Card className={`w-full max-w-lg border shadow-xl backdrop-blur-md overflow-hidden transition-all duration-300 ${
@@ -1262,127 +1262,127 @@ export default function BrickBreakerGame() {
                 </div>
               )}
 
-              {/* 게임 성공(미션 완료) 오버레이 */}
+              {/* 게임 성공(미션 완료) 모달: 캔버스 안에 가두지 않고 뷰포트 전체 모달로 띄워 어떤 기기에서도 글씨와 버튼이 절대 잘리지 않음 */}
               {gameStatus === "cleared" && (
-                <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 text-center animate-in fade-in zoom-in-95 duration-300 z-40">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center mb-1 sm:mb-2 shadow-lg shadow-amber-500/40 shrink-0">
-                    <Trophy className="w-5 h-5 sm:w-8 sm:h-8 text-slate-950" />
-                  </div>
-                  <h2 className="text-base sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-white mb-0.5 leading-tight">
-                    🎉 게임 미션 완료!
-                  </h2>
-                  <p className="text-slate-300 text-xs sm:text-sm max-w-sm mb-2 leading-tight">
-                    {userName} 님 대단합니다!<br />
-                    목표인 <strong className="text-rose-400">연한 빨강 블록 3개</strong>를 모두 파괴했습니다!
-                  </p>
-
-                  <div className="bg-slate-900/95 border border-slate-700/80 rounded-xl p-2.5 sm:p-4 mb-2.5 sm:mb-4 w-full max-w-[280px] sm:max-w-sm space-y-1.5 sm:space-y-2 text-xs sm:text-sm shadow-inner">
-                    <div className="flex justify-between items-center border-b border-slate-800 pb-1 sm:pb-1.5">
-                      <span className="text-slate-400 text-xs sm:text-sm">내 클리어 시간</span>
-                      <span className="font-bold text-cyan-300 font-mono text-sm sm:text-base">{finalClearedTime || formatTime(elapsedTime)}</span>
+                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+                  <div className="bg-slate-900 border border-slate-700/80 rounded-2xl p-5 sm:p-6 w-full max-w-[340px] sm:max-w-md shadow-2xl text-center flex flex-col items-center">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center mb-2.5 sm:mb-3 shadow-lg shadow-amber-500/40 shrink-0">
+                      <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-slate-950" />
                     </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-white mb-1">
+                      🎉 게임 미션 완료!
+                    </h2>
+                    <p className="text-slate-300 text-xs sm:text-sm mb-3.5 leading-relaxed">
+                      {userName} 님 대단합니다!<br />
+                      목표인 <strong className="text-rose-400">연한 빨강 블록 3개</strong>를 모두 파괴했습니다!
+                    </p>
 
-                    {/* TOP 3 명예의 전당 순위 출력 영역 */}
-                    <div className="space-y-1 pt-0.5 text-left">
-                      <p className="text-xs sm:text-sm font-bold text-amber-400 flex items-center gap-1.5">
-                        <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                        실시간 TOP 3 랭킹
-                      </p>
+                    <div className="bg-slate-950/90 border border-slate-800 rounded-xl p-3 sm:p-4 mb-4 w-full space-y-2 text-xs sm:text-sm shadow-inner">
+                      <div className="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                        <span className="text-slate-400 text-xs sm:text-sm">내 클리어 시간</span>
+                        <span className="font-bold text-cyan-300 font-mono text-sm sm:text-base">{finalClearedTime || formatTime(elapsedTime)}</span>
+                      </div>
 
-                      {isLoadingRankings ? (
-                        <p className="text-xs text-slate-400 animate-pulse py-0.5">구글 시트에서 랭킹 불러오는 중...</p>
-                      ) : topRankings.length > 0 ? (
-                        <div className="space-y-1">
-                          {topRankings.map((r, i) => (
-                            <div
-                              key={i}
-                              className={`flex justify-between items-center px-2 py-1 rounded text-xs sm:text-sm ${
-                                i === 0
-                                  ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-bold"
-                                  : i === 1
-                                  ? "bg-slate-700/40 text-slate-200"
-                                  : "bg-slate-800/40 text-slate-300"
-                              }`}
-                            >
-                              <span className="flex items-center gap-1.5 truncate mr-2">
-                                <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
-                                  i === 0 ? "bg-amber-400 text-slate-950" : i === 1 ? "bg-slate-300 text-slate-950" : "bg-amber-700 text-white"
-                                }`}>
-                                  {i + 1}
+                      {/* TOP 3 명예의 전당 순위 출력 영역 */}
+                      <div className="space-y-1 pt-1 text-left">
+                        <p className="text-xs sm:text-sm font-bold text-amber-400 flex items-center gap-1.5">
+                          <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                          실시간 TOP 3 랭킹
+                        </p>
+
+                        {isLoadingRankings ? (
+                          <p className="text-xs text-slate-400 animate-pulse py-1">구글 시트에서 랭킹 불러오는 중...</p>
+                        ) : topRankings.length > 0 ? (
+                          <div className="space-y-1">
+                            {topRankings.map((r, i) => (
+                              <div
+                                key={i}
+                                className={`flex justify-between items-center px-2 py-1 rounded text-xs sm:text-sm ${
+                                  i === 0
+                                    ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-bold"
+                                    : i === 1
+                                    ? "bg-slate-700/40 text-slate-200"
+                                    : "bg-slate-800/40 text-slate-300"
+                                }`}
+                              >
+                                <span className="flex items-center gap-1.5 truncate mr-2">
+                                  <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 ${
+                                    i === 0 ? "bg-amber-400 text-slate-950" : i === 1 ? "bg-slate-300 text-slate-950" : "bg-amber-700 text-white"
+                                  }`}>
+                                    {i + 1}
+                                  </span>
+                                  <span className="truncate max-w-[120px] sm:max-w-[160px]">{r.name}</span>
                                 </span>
-                                <span className="truncate max-w-[110px] sm:max-w-[150px]">{r.name}</span>
-                              </span>
-                              <span className="font-mono font-bold text-cyan-300 shrink-0">{r.finishtime}</span>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-xs text-slate-500 py-0.5">저장된 랭킹 기록을 확인하는 중입니다...</p>
+                                <span className="font-mono font-bold text-cyan-300 shrink-0">{r.finishtime}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-xs text-slate-500 py-1">저장된 랭킹 기록을 확인하는 중입니다...</p>
+                        )}
+                      </div>
+
+                      {isSavingToSheet && (
+                        <p className="text-xs text-blue-300 animate-pulse pt-1">구글 시트에 기록 저장 중...</p>
+                      )}
+                      {saveSheetSuccess === true && (
+                        <p className="text-xs text-emerald-400 pt-1">✓ 구글 시트에 성공 기록이 저장되었습니다</p>
                       )}
                     </div>
 
-                    {isSavingToSheet && (
-                      <p className="text-xs text-blue-300 animate-pulse pt-0.5">구글 시트에 기록 저장 중...</p>
-                    )}
-                    {saveSheetSuccess === true && (
-                      <p className="text-xs text-emerald-400 pt-0.5">✓ 구글 시트에 성공 기록이 저장되었습니다</p>
-                    )}
-                  </div>
-
-                  <div className="flex gap-2.5">
-                    <Button
-                      size="sm"
-                      onClick={handleRetryCurrentGame}
-                      className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 cursor-pointer shadow-md"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5 mr-1" />
-                      다시하기
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleRestartToLobby}
-                      className="border-slate-600 text-slate-300 hover:bg-slate-800 text-xs sm:text-sm h-8 sm:h-9 px-3.5 sm:px-4 cursor-pointer"
-                    >
-                      이름 변경(메인)
-                    </Button>
+                    <div className="flex gap-3 w-full">
+                      <Button
+                        onClick={handleRetryCurrentGame}
+                        className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm h-10 cursor-pointer shadow-md"
+                      >
+                        <RotateCcw className="w-4 h-4 mr-1.5" />
+                        다시하기
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleRestartToLobby}
+                        className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-800 text-xs sm:text-sm h-10 cursor-pointer"
+                      >
+                        이름 변경(메인)
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* 게임 실패 오버레이 */}
               {gameStatus === "failed" && (
-                <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 text-center animate-in fade-in zoom-in-95 duration-300 z-40 overflow-y-auto">
-                  <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-rose-950/80 border-2 border-rose-500/80 flex items-center justify-center mb-2 shadow-lg shadow-rose-900/50 shrink-0">
-                    <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-rose-400" />
-                  </div>
-                  <h2 className="text-lg sm:text-2xl font-black text-rose-400 mb-1">
-                    게임 미션 실패
-                  </h2>
-                  <p className="text-slate-300 text-xs max-w-xs mb-4">
-                    {userName} 님의 모든 생명이 소진되었습니다.<br />
-                    <span className="text-slate-400 text-[11px] mt-0.5 block">
-                      (미션 실패로 소요 시간은 측정 및 기록되지 않습니다)
-                    </span>
-                  </p>
+                <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+                  <div className="bg-slate-900 border border-slate-700/80 rounded-2xl p-5 sm:p-6 w-full max-w-[340px] sm:max-w-md shadow-2xl text-center flex flex-col items-center">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-rose-950/80 border-2 border-rose-500/80 flex items-center justify-center mb-2.5 shadow-lg shadow-rose-900/50 shrink-0">
+                      <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-rose-400" />
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-rose-400 mb-1">
+                      게임 미션 실패
+                    </h2>
+                    <p className="text-slate-300 text-xs sm:text-sm max-w-xs mb-4">
+                      {userName} 님의 모든 생명이 소진되었습니다.<br />
+                      <span className="text-slate-400 text-xs mt-1 block">
+                        (미션 실패로 소요 시간은 측정 및 기록되지 않습니다)
+                      </span>
+                    </p>
 
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      onClick={handleRetryCurrentGame}
-                      className="bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm h-8 sm:h-9 px-3 cursor-pointer shadow-md shadow-rose-600/30"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5 mr-1" />
-                      다시 시도
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleRestartToLobby}
-                      className="border-slate-600 text-slate-300 hover:bg-slate-800 text-xs sm:text-sm h-8 sm:h-9 px-3 cursor-pointer"
-                    >
-                      이름 변경(메인)
-                    </Button>
+                    <div className="flex gap-3 w-full">
+                      <Button
+                        onClick={handleRetryCurrentGame}
+                        className="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm h-10 cursor-pointer shadow-md shadow-rose-600/30"
+                      >
+                        <RotateCcw className="w-4 h-4 mr-1.5" />
+                        다시 시도
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleRestartToLobby}
+                        className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-800 text-xs sm:text-sm h-10 cursor-pointer"
+                      >
+                        이름 변경(메인)
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
